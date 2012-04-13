@@ -9,7 +9,37 @@
 /* Begin PBXBuildFile section */
 		567D24FE1537F41500812393 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567D24FD1537F41500812393 /* Cocoa.framework */; };
 		567D25081537F41500812393 /* ViewHierarchyInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25071537F41500812393 /* ViewHierarchyInspector.m */; };
+		567D25141537FDC700812393 /* NSFileHandle+StringIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 567D25121537FDC700812393 /* NSFileHandle+StringIO.h */; };
+		567D25151537FDC700812393 /* NSFileHandle+StringIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25131537FDC700812393 /* NSFileHandle+StringIO.m */; };
+		567D2517153803A100812393 /* ViewHierarchyInspector.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 567D24FA1537F41500812393 /* ViewHierarchyInspector.dylib */; };
+		567D251D1538040B00812393 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567D24FD1537F41500812393 /* Cocoa.framework */; };
+		567D25271538041D00812393 /* ViewHierarchyInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25071537F41500812393 /* ViewHierarchyInspector.m */; };
+		567D25281538041F00812393 /* NSFileHandle+StringIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25131537FDC700812393 /* NSFileHandle+StringIO.m */; };
+		567D252A1538048300812393 /* ViewHierarchyInspector_gc.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		567D25161538039100812393 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /tmp;
+			dstSubfolderSpec = 0;
+			files = (
+				567D2517153803A100812393 /* ViewHierarchyInspector.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		567D25291538047400812393 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /tmp;
+			dstSubfolderSpec = 0;
+			files = (
+				567D252A1538048300812393 /* ViewHierarchyInspector_gc.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		567D24FA1537F41500812393 /* ViewHierarchyInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = ViewHierarchyInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -17,9 +47,12 @@
 		567D25001537F41500812393 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		567D25011537F41500812393 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		567D25021537F41500812393 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		567D25051537F41500812393 /* ViewHierarchyInspector-Prefix.pch */ = {isa = PBXFileReference; path = "ViewHierarchyInspector-Prefix.pch"; sourceTree = "<group>"; };
-		567D25061537F41500812393 /* ViewHierarchyInspector.h */ = {isa = PBXFileReference; path = ViewHierarchyInspector.h; sourceTree = "<group>"; };
+		567D25051537F41500812393 /* ViewHierarchyInspector-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ViewHierarchyInspector-Prefix.pch"; sourceTree = "<group>"; };
+		567D25061537F41500812393 /* ViewHierarchyInspector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewHierarchyInspector.h; sourceTree = "<group>"; };
 		567D25071537F41500812393 /* ViewHierarchyInspector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewHierarchyInspector.m; sourceTree = "<group>"; };
+		567D25121537FDC700812393 /* NSFileHandle+StringIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+StringIO.h"; sourceTree = "<group>"; };
+		567D25131537FDC700812393 /* NSFileHandle+StringIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+StringIO.m"; sourceTree = "<group>"; };
+		567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = ViewHierarchyInspector_gc.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +61,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				567D24FE1537F41500812393 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		567D25191538040B00812393 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				567D251D1538040B00812393 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				567D24FA1537F41500812393 /* ViewHierarchyInspector.dylib */,
+				567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,6 +115,8 @@
 		567D25031537F41500812393 /* ViewHierarchyInspector */ = {
 			isa = PBXGroup;
 			children = (
+				567D25121537FDC700812393 /* NSFileHandle+StringIO.h */,
+				567D25131537FDC700812393 /* NSFileHandle+StringIO.m */,
 				567D25061537F41500812393 /* ViewHierarchyInspector.h */,
 				567D25071537F41500812393 /* ViewHierarchyInspector.m */,
 				567D25041537F41500812393 /* Supporting Files */,
@@ -95,6 +139,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				567D25141537FDC700812393 /* NSFileHandle+StringIO.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		567D251A1538040B00812393 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +160,7 @@
 				567D24F61537F41500812393 /* Sources */,
 				567D24F71537F41500812393 /* Frameworks */,
 				567D24F81537F41500812393 /* Headers */,
+				567D25161538039100812393 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -116,6 +169,24 @@
 			name = ViewHierarchyInspector;
 			productName = ViewHierarchyInspector;
 			productReference = 567D24FA1537F41500812393 /* ViewHierarchyInspector.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		567D251B1538040B00812393 /* ViewHierarchyInspector_gc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 567D25241538040B00812393 /* Build configuration list for PBXNativeTarget "ViewHierarchyInspector_gc" */;
+			buildPhases = (
+				567D25181538040B00812393 /* Sources */,
+				567D25191538040B00812393 /* Frameworks */,
+				567D251A1538040B00812393 /* Headers */,
+				567D25291538047400812393 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ViewHierarchyInspector_gc;
+			productName = ViewHierarchyInspector_gc;
+			productReference = 567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -139,6 +210,7 @@
 			projectRoot = "";
 			targets = (
 				567D24F91537F41500812393 /* ViewHierarchyInspector */,
+				567D251B1538040B00812393 /* ViewHierarchyInspector_gc */,
 			);
 		};
 /* End PBXProject section */
@@ -149,6 +221,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				567D25081537F41500812393 /* ViewHierarchyInspector.m in Sources */,
+				567D25151537FDC700812393 /* NSFileHandle+StringIO.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		567D25181538040B00812393 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				567D25271538041D00812393 /* ViewHierarchyInspector.m in Sources */,
+				567D25281538041F00812393 /* NSFileHandle+StringIO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +289,8 @@
 		567D250C1537F41500812393 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -218,8 +302,38 @@
 		567D250D1537F41500812393 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ViewHierarchyInspector/ViewHierarchyInspector-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		567D25251538040B00812393 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ViewHierarchyInspector/ViewHierarchyInspector-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		567D25261538040B00812393 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ViewHierarchyInspector/ViewHierarchyInspector-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -243,6 +357,14 @@
 			buildConfigurations = (
 				567D250C1537F41500812393 /* Debug */,
 				567D250D1537F41500812393 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		567D25241538040B00812393 /* Build configuration list for PBXNativeTarget "ViewHierarchyInspector_gc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				567D25251538040B00812393 /* Debug */,
+				567D25261538040B00812393 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

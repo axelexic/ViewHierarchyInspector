@@ -1,177 +1,89 @@
-Shared library to print the entire view heierarchy of an application whose 
-source code is not available. It's useful for understanding how the application
-was designed, which parts were custom drawn, and which were just off the 
-shelf AppKit classes.
+Shared library to print the entire view heierarchy (and show View frame borders) 
+of an application whose source code is not available. It's useful for 
+understanding how the application was designed, which parts were custom drawn, 
+and which were just off the shelf AppKit classes.
 
-There are two versions of the library: One using GC another one using ARC or 
+There are two targets in Xcode: One using GC another one using ARC or
 MRR. The library is inserted as DYLD_INSERT_LIBRARIES and it will print the
-entire view hierarchy on command line. Here's the output of running it 
-with GrargeBand (for GarageBand, the library must be compiled to 32-bit, 
-without ARC, since that's what GarageBand/i386 understand.)
+entire view hierarchy on command line. Setting the environment variable 
+SHOW_FRAMES=1 will cause the entire UI to print a border and view frame 
+dimentions. See the screen shot included. 
+
+Here's the output of running it with GrargeBand (for GarageBand, the 
+library must be compiled to 32-bit, without ARC, since that's what 
+GarageBand/i386 "non-fragile ABI" understands.)
 
 
-$ DYLD_INSERT_LIBRARIES=/tmp/ViewHierarchyInspector.dylib /Applications/GarageBand.app/Contents/MacOS/GarageBand
+$ SHOW_FRAMES=1 DYLD_INSERT_LIBRARIES=/tmp/ViewHierarchyInspector.dylib /Applications/GarageBand.app/Contents/MacOS/GarageBand
 
 .... <Bring the main song window up....
 
---
-2012-04-13 00:37:26.530 GarageBand[2121:4303] Traversing window: 0x18008e00 <_NS:785>
- DfWoodFrameView <(null)> <- EcFrameView
-     EcWindowButton <(null)> <- NSButton
-     EcWindowButton <(null)> <- NSButton
-     EcWindowButton <(null)> <- NSButton
-     EcWindowButton <(null)> <- NSButton
-     MABackgroundView <_NS:537> <- NSView
-         MABackgroundView <_NS:536> <- NSView
-             NSView <_NS:190> <- NSResponder
-                 NSView <_NS:475> <- NSResponder
-                     MASlider <_NS:596> <- NSSlider
-                     MALevelMeter <_NS:474> <- NSControl
-                 NSImageView <_NS:189> <- NSControl
-                     DfLCDModeControl <_NS:437> <- DfAbstractLCDSongControl
-                     NSImageView <_NS:425> <- NSControl
-                     MAButton <_NS:415> <- NSButton
-                     MAButton <_NS:402> <- NSButton
-                     DfLCDTabView <_NS:192> <- NSTabView
-                         NSView <_NS:271> <- NSResponder
-                             MATextField <_NS:273> <- NSTextField
-                             MATextField <_NS:286> <- NSTextField
-                             MATextField <_NS:299> <- NSTextField
-                             MATextField <_NS:308> <- NSTextField
-                             DfNumberEditorControl <_NS:317> <- EcCellGroupControl
-                 MAButton <_NS:586> <- NSButton
-                 MAButton <_NS:488> <- NSButton
-                 MAButton <_NS:577> <- NSButton
-                 MAButton <_NS:568> <- NSButton
-                 MAButton <_NS:559> <- NSButton
-                 MAButton <_NS:550> <- NSButton
-                 MAButton <_NS:540> <- NSButton
-             MAButton <_NS:610> <- NSButton
-             MAButton <_NS:619> <- NSButton
-             MAButton <_NS:628> <- NSButton
-             MAButton <_NS:637> <- NSButton
-             MAButton <_NS:646> <- NSButton
-         MAAccessoryContainerView <_NS:500> <- NSView
-             NSView <_NS:674> <- NSResponder
-                 DfTabView <_NS:678> <- NSTabView
-                     NSView <_NS:10> <- NSResponder
-                         MAButton <_NS:69> <- NSButton
-                         MAButton <_NS:48> <- NSButton
-                         NSTabView <_NS:12> <- NSView
-                             MABorderView <_NS:49> <- MABackgroundView
-                                 DfTrackInfoChannelStripSelectView <_NS:74> <- NSView
-                                     MARadioMatrix <_NS:140> <- NSMatrix
-                                     NSBox <_NS:76> <- NSView
-                                         NSView <_NS:78> <- NSResponder
-                                             MAButton <_NS:80> <- NSButton
-                                             MAButton <_NS:88> <- NSButton
-                                             MATextField <_NS:96> <- NSTextField
-                                 DfInspectorTabView <_NS:178> <- NSTabView
-                                     NSView <_NS:561> <- NSResponder
-                                         MABorderView <_NS:563> <- MABackgroundView
-                                             NSProgressIndicator <_NS:565> <- NSView
-                                             DfTrackInspectorBrowser <_NS:568> <- DfBrowserControl
-                                                 NSScrollView <(null)> <- NSView
-                                                     NSClipView <(null)> <- NSView
-                                                         NSView <(null)> <- NSResponder
-                                                             EcBrowserColumnScrollView <(null)> <- NSScrollView
-                                                                 DfTrackInspectorBrowserClipView <(null)> <- ECBrowserClipView
-                                                                     EcBrowserMatrix <(null)> <- NSMatrix
-                                                                 MAScroller <(null)> <- NSScroller
-                                                             EcBrowserColumnScrollView <(null)> <- NSScrollView
-                                                                 DfTrackInspectorBrowserClipView <(null)> <- ECBrowserClipView
-                                                                     EcBrowserMatrix <(null)> <- NSMatrix
-                                                                 MAScroller <(null)> <- NSScroller
-                                                     NSScroller <(null)> <- NSControl
-                                             MABorderView <_NS:572> <- MABackgroundView
-                                                 NSView <_NS:574> <- NSResponder
-                                                 DfTrackInspectorImageWell <_NS:578> <- NSImageView
-                                                     ECIconPicker <_NS:591> <- NSControl
-                                                 NSView <_NS:11> <- NSResponder
-                                                     MATextField <_NS:988> <- NSTextField
-                                                     MATextField <_NS:979> <- NSTextField
-                                                     MATextField <_NS:970> <- NSTextField
-                                                     MAButton <_NS:10> <- NSButton
-                                                     MAPopUpButton <_NS:675> <- NSPopUpButton
-                                                     MASlider <_NS:704> <- NSSlider
-                                                     MAButton <_NS:32> <- NSButton
-                                                     MAPopUpButton <_NS:649> <- NSPopUpButton
-                                                     MAButton <_NS:962> <- NSButton
-                                                     MAButton <_NS:954> <- NSButton
-                                             MAPopUpButton <_NS:598> <- NSPopUpButton
-                                 MAButton <_NS:48> <- NSButton
-                                 MAButton <_NS:62> <- NSButton
-                 MAAccessorySplitter <_NS:676> <- DfBorderView
-             MAAccessoryContainerView <_NS:499> <- NSView
-                 NSView <_NS:18> <- NSResponder
-                     MASlider <_NS:149> <- NSSlider
-                     DfArrangeScrollView <_NS:15> <- DfSpecialScrollView
-                         ECSpecialClipView <(null)> <- NSClipView
-                             DfArrangeRegionView <_NS:22> <- DfArrangeView
-                         MAScroller <_NS:39> <- NSScroller
-                         MAScroller <_NS:35> <- NSScroller
-                         MAButton <(null)> <- NSButton
-                         MAButton <(null)> <- NSButton
-                         ECSpecialClipView <(null)> <- NSClipView
-                             DfRulerView <(null)> <- DfActionView
-                     DfArrangeScrollView <_NS:100> <- DfSpecialScrollView
-                         NSClipView <_NS:95> <- NSView
-                             DfArrangeTrackView <_NS:94> <- DfDropActionView
-                         NSScroller <_NS:104> <- NSControl
-                         NSScroller <_NS:106> <- NSControl
-                         ECSpecialClipView <(null)> <- NSClipView
-                             DfArrangeTrackCycleHeader <(null)> <- MABorderView
-                     MAHeaderView <_NS:111> <- NSTextField
-                 NSView <_NS:502> <- NSResponder
-                     MAAccessorySplitter <_NS:520> <- DfBorderView
-                         MAAccessorySplitter <_NS:522> <- DfBorderView
-                     DfBottomAccessoryTabView <_NS:504> <- NSTabView
-                         MABackgroundView <_NS:19> <- NSView
-                             NSTabView <_NS:975> <- NSView
-                                 NSView <_NS:977> <- NSResponder
-                                     DfSpecialScrollView <_NS:979> <- ECScrollView
-                                         ECSpecialClipView <(null)> <- NSClipView
-                                             DfEditSampleView <_NS:1060> <- DfEditView
-                                         MAScroller <_NS:991> <- NSScroller
-                                         MAScroller <_NS:989> <- NSScroller
-                                         NSView <(null)> <- NSResponder
-                                         ECSpecialClipView <(null)> <- NSClipView
-                                             DfRulerView <(null)> <- DfActionView
-                                         MAButton <(null)> <- NSButton
-                             NSTabView <_NS:18> <- NSView
-                                 NSView <_NS:21> <- NSResponder
-                                     MABorderView <_NS:23> <- MABackgroundView
-                                         GkControlContainer <_NS:25> <- MABorderView
-                                             MABorderView <_NS:27> <- MABackgroundView
-                                                 MATextField <_NS:29> <- NSTextField
-                                                 MASlider <_NS:72> <- NSSlider
-                                                 MABackgroundView <_NS:90> <- NSView
-                                                 MABackgroundView <_NS:96> <- NSView
-                                             MAButton <_NS:106> <- NSButton
-                                             MATextField <_NS:119> <- NSTextField
-                                         GkControlContainer <_NS:139> <- MABorderView
-                                             MABorderView <_NS:141> <- MABackgroundView
-                                                 MATextField <_NS:143> <- NSTextField
-                                                 MASlider <_NS:154> <- NSSlider
-                                             MAButton <_NS:165> <- NSButton
-                                             MATextField <_NS:174> <- NSTextField
-                                         GkControlContainer <_NS:188> <- MABorderView
-                                             MABackgroundView <_NS:190> <- NSView
-                                                 MASlider <_NS:192> <- NSSlider
-                                                 MATextField <_NS:199> <- NSTextField
-                                                 MATextField <_NS:213> <- NSTextField
-                                             MATextField <_NS:226> <- NSTextField
-                                             MAPopUpButton <_NS:235> <- NSPopUpButton
-                                         MAPopUpButton <_NS:314> <- NSPopUpButton
-                                         MAButton <_NS:354> <- NSButton
-                                     DfEditSampleSideView <_NS:370> <- DfEditSideView
-                                     MAButton <_NS:373> <- NSButton
-                                         MAButton <_NS:375> <- NSButton
-                                         GkMagicHorizontalSubviewLayouter <_NS:385> <- MABorderView
-                                             NSKVONotifying_MAButton <_NS:387> <- NSButton
-                                             NSKVONotifying_MATextField <_NS:396> <- NSTextField
-                                     MABorderView <_NS:425> <- MABackgroundView
-                             MABorderView <_NS:1028> <- MABackgroundView
-                                 MASlider <_NS:1030> <- NSSlider
-
---
+2012-04-13 12:26:11.597 GarageBand[1604:4303] Traversing window: 0x1a7d7ed0 <YehKyaHuaa.band>
+ DfWoodFrameView <- EcFrameView <- NSView <{{0, 0}, {1440, 900}}>
+     EcWindowButton <- NSButton <{{22, 879}, {14, 16}}>
+     EcWindowButton <- NSButton <{{43, 879}, {14, 16}}>
+     EcWindowButton <- NSButton <{{64, 879}, {14, 16}}>
+     EcWindowButton <- NSButton <{{1403, 879}, {16, 17}}>
+     MABackgroundView <- NSView <{{17, 0}, {1405, 875}}>
+         MABackgroundView <- NSView <{{0, 0}, {1405, 73}}>
+             NSView <-  <{{408, 7}, {659, 61}}>
+                 NSView <-  <{{551, 11}, {108, 34}}>
+                     MASlider <- NSSlider <{{1, 0}, {106, 15}}>
+                     MALevelMeter <- NSControl <{{0, 16}, {108, 18}}>
+                 NSImageView <-  <{{213, 4}, {224, 52}}>
+                     DfLCDModeControl <- DfAbstractLCDSongControl <- NSControl <{{7, 13}, {26, 26}}>
+                     NSImageView <-  <{{216, 5}, {3, 3}}>
+                     MAButton <- NSButton <{{11, 39}, {18, 10}}>
+                     MAButton <- NSButton <{{11, 3}, {18, 10}}>
+                     DfLCDTabView <- NSTabView <{{33, 0}, {185, 51}}>
+                         NSView <-  <{{0, 0}, {185, 51}}>
+                             MATextField <- NSTextField <{{9, 37}, {80, 13}}>
+                             MATextField <- NSTextField <{{9, 1}, {31, 13}}>
+                             MATextField <- NSTextField <{{71, 1}, {31, 13}}>
+                             DfNumberEditorControl <- EcCellGroupControl <- NSControl <{{10, 10}, {173, 30}}>
+                 MAButton <- NSButton <{{0, 13}, {41, 34}}>
+                 MAButton <- NSButton <{{79, 13}, {38, 34}}>
+                 MAButton <- NSButton <{{41, 13}, {38, 34}}>
+                 MAButton <- NSButton <{{117, 13}, {38, 34}}>
+                 MAButton <- NSButton <{{453, 13}, {41, 34}}>
+                 MAButton <- NSButton <{{494, 13}, {42, 34}}>
+                 MAButton <- NSButton <{{155, 13}, {42, 34}}>
+             MAButton <- NSButton <{{60, 23}, {36, 27}}>
+             MAButton <- NSButton <{{1290, 23}, {35, 27}}>
+             MAButton <- NSButton <{{1325, 23}, {35, 27}}>
+             MAButton <- NSButton <{{1360, 23}, {35, 27}}>
+             MAButton <- NSButton <{{10, 23}, {36, 27}}>
+         MAAccessoryContainerView <- NSView <{{0, 73}, {1405, 802}}>
+             NSView <-  <{{1042, 0}, {363, 802}}>
+                 DfTabView <- NSTabView <{{1, 0}, {362, 802}}>
+                     NSView <-  <{{0, 0}, {362, 802}}>
+                         MAButton <- NSButton <{{0, 770}, {181, 32}}>
+                         MAButton <- NSButton <{{181, 770}, {181, 32}}>
+                         NSTabView <-  <{{0, 0}, {362, 770}}>
+                             MABorderView <- MABackgroundView <- NSView <{{0, 0}, {362, 770}}>
+                                 MAButton <- NSButton <{{14, 11}, {163, 26}}>
+                                 MAButton <- NSButton <{{186, 11}, {163, 26}}>
+                                 DfTrackInfoGuitarMainView <- DfActionView <- NSView <{{0, 47}, {362, 723}}>
+                                     MAButton <- NSButton <{{310, 693}, {46, 20}}>
+                                     MAPopUpButton <- NSPopUpButton <{{65, 693}, {232, 20}}>
+                 MAAccessorySplitter <- DfBorderView <- NSView <{{0, 0}, {1, 802}}>
+             MAAccessoryContainerView <- NSView <{{0, 0}, {1042, 802}}>
+                 NSView <-  <{{0, 0}, {1042, 802}}>
+                     MASlider <- NSSlider <{{0, 0}, {307, 15}}>
+                     DfArrangeScrollView <- DfSpecialScrollView <- ECScrollView <- NSScrollView <{{307, 0}, {735, 802}}>
+                         ECSpecialClipView <- NSClipView <{{0, 16}, {720, 771}}>
+                             DfArrangeRegionView <- DfArrangeView <- DfDropActionView <- DfActionView <- NSView <{{0, 0}, {2138, 771}}>
+                         MAScroller <- NSScroller <{{0, 787}, {720, 15}}>
+                         MAScroller <- NSScroller <{{720, 16}, {15, 771}}>
+                         MAButton <- NSButton <{{720, 0}, {16, 16}}>
+                         MAButton <- NSButton <{{720, 787}, {16, 17}}>
+                         ECSpecialClipView <- NSClipView <{{0, 0}, {720, 16}}>
+                             DfRulerView <- DfActionView <- NSView <{{0, 0}, {2138, 16}}>
+                     DfArrangeScrollView <- DfSpecialScrollView <- ECScrollView <- NSScrollView <{{0, 15}, {307, 771}}>
+                         NSClipView <-  <{{0, 0}, {307, 771}}>
+                             DfArrangeTrackView <- DfDropActionView <- DfActionView <- NSView <{{0, 0}, {307, 771}}>
+                         NSScroller <-  <{{-100, -100}, {15, 341}}>
+                         NSScroller <-  <{{-100, -100}, {199, 15}}>
+                         ECSpecialClipView <- NSClipView <{{0, 0}, {307, 0}}>
+                             DfArrangeTrackCycleHeader <- MABorderView <- MABackgroundView <- NSView <{{0, 0}, {307, 0}}>
+                     MAHeaderView <- NSTextField <{{0, 786}, {307, 16}}>

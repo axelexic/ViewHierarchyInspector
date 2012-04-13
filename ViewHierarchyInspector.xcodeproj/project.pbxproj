@@ -16,6 +16,8 @@
 		567D25271538041D00812393 /* ViewHierarchyInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25071537F41500812393 /* ViewHierarchyInspector.m */; };
 		567D25281538041F00812393 /* NSFileHandle+StringIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D25131537FDC700812393 /* NSFileHandle+StringIO.m */; };
 		567D252A1538048300812393 /* ViewHierarchyInspector_gc.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */; };
+		56E09A331538B7A1003E3641 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F132931538A8C2009885C9 /* QuartzCore.framework */; };
+		56F132941538A8C2009885C9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F132931538A8C2009885C9 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +55,9 @@
 		567D25121537FDC700812393 /* NSFileHandle+StringIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+StringIO.h"; sourceTree = "<group>"; };
 		567D25131537FDC700812393 /* NSFileHandle+StringIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+StringIO.m"; sourceTree = "<group>"; };
 		567D251C1538040B00812393 /* ViewHierarchyInspector_gc.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = ViewHierarchyInspector_gc.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		56B949B11538B6E200FE7FAB /* ScreenShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScreenShot.png; sourceTree = "<group>"; };
+		56F132931538A8C2009885C9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		56F132961538B393009885C9 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56F132941538A8C2009885C9 /* QuartzCore.framework in Frameworks */,
 				567D24FE1537F41500812393 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56E09A331538B7A1003E3641 /* QuartzCore.framework in Frameworks */,
 				567D251D1538040B00812393 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +85,8 @@
 		567D24EF1537F41400812393 = {
 			isa = PBXGroup;
 			children = (
+				56B949B11538B6E200FE7FAB /* ScreenShot.png */,
+				56F132961538B393009885C9 /* README */,
 				567D25031537F41500812393 /* ViewHierarchyInspector */,
 				567D24FC1537F41500812393 /* Frameworks */,
 				567D24FB1537F41500812393 /* Products */,
@@ -96,6 +105,7 @@
 		567D24FC1537F41500812393 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				56F132931538A8C2009885C9 /* QuartzCore.framework */,
 				567D24FD1537F41500812393 /* Cocoa.framework */,
 				567D24FF1537F41500812393 /* Other Frameworks */,
 			);
@@ -359,6 +369,7 @@
 				567D250D1537F41500812393 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		567D25241538040B00812393 /* Build configuration list for PBXNativeTarget "ViewHierarchyInspector_gc" */ = {
 			isa = XCConfigurationList;
@@ -367,6 +378,7 @@
 				567D25261538040B00812393 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

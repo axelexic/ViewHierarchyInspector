@@ -23,13 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
+#define MAX_WINDOW_CACHE_SIZE   32
+
 @interface ViewHierarchyInspector : NSObject{
     @private
-    void* windowsTraversed[512];    // It's a singleton, for Christ sake stop complaing...
+    void* windowsTraversed[MAX_WINDOW_CACHE_SIZE];
     NSInteger maxIndex;
+    BOOL        likesFrames;
 }
 
 +(id) sharedViewInspector;
+@property(assign, atomic) BOOL likesFrames;
 -(void) applicationWillFinishLaunching: (NSNotification*) aNotification;
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
 -(void) traverseViewHierarchy: (NSView*) currentView currentTreeHeight: (NSUInteger) height;

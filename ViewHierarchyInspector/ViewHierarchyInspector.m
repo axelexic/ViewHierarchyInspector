@@ -5,20 +5,20 @@
 
 /**
  * Copyright (C) 2012 Yogesh Prem Swami. http://www.axelexic.org
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-* http://www.apache.org/licenses/LICENSE-2.0
-* 
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-*/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 #import "ViewHierarchyInspector.h"
 #import "NSFileHandle+StringIO.h"
@@ -78,17 +78,17 @@ static ViewHierarchyInspector* gViewInspector = nil;
                                              selector:@selector(printVewHierarchyOfMainWindow:)
                                                  name:NSWindowDidBecomeMainNotification
                                                object:nil];
-    NSLog(@"WillFinishLaunching notification received!");
+    NSLog(@"*** WillFinishLaunching notification received!");
 }
 
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification{
-    NSLog(@"DidFinishLaunching notification received!");
+    NSLog(@"*** DidFinishLaunching notification received!");
 }
 
 -(void) printVewHierarchyOfMainWindow: (NSNotification*) aNotification{
     NSWindow* win = [aNotification object];
     NSView* contentView = win.contentView;
-    NSLog(@"Traversing window: %p <%@>", win, [win identifier]);
+    NSLog(@"Traversing window: %p <%@>", win, [win title]);
     
     for (int i = 0 ; i<gViewInspector->maxIndex; i++) {
         if (gViewInspector->windowsTraversed[i] == (__bridge void*)win) {
@@ -101,24 +101,49 @@ static ViewHierarchyInspector* gViewInspector = nil;
     [[NSFileHandle fileHandleWithStandardOutput] writeStringWithFormat:@"\n--\n"];
 }
 
+
+-(NSString*) classHierarchyUptoCocoaClass:(Class) currentClass{
+    NSString* result = @"";
+    NSString* topLevel = [NSString stringWithFormat:@"%s", class_getName(currentClass)];
+    
+    if ([topLevel hasPrefix:@"NS"]) {
+        return @"";
+    }
+    
+    while ((currentClass  = class_getSuperclass(currentClass)) != [NSObject class]) {
+        NSString* className = [NSString stringWithFormat:@"%s", class_getName(currentClass)];
+        if ([className hasPrefix:@"NS"]) {
+            break;
+        }
+        result = [result stringByAppendingFormat:@"%@ <- ", className];
+    }
+    return [result stringByAppendingFormat:@"%s", class_getName(currentClass)];
+}
+
 -(void) traverseViewHierarchy: (NSView*) currentView currentTreeHeight: (NSUInteger) height{
     @autoreleasepool {
         NSFileHandle* stdOut = [NSFileHandle fileHandleWithStandardOutput];
         NSUInteger indentation = height*INDENT;
         NSArray* subViews = [currentView subviews];
+        Class currentClass = [currentView class];
+        
         for (int i = 0; i<indentation; i++) {
             [stdOut writeStringWithFormat:@" "];
         }
         
-        
-        [stdOut writeStringWithFormat:@" %s <%@> <- %s\n",
+        [stdOut writeStringWithFormat:@" %s <- %@ <%@>\n",
          object_getClassName(currentView),
-         [currentView identifier],
-         object_getClassName(class_getSuperclass([currentView class]))
+         [self classHierarchyUptoCocoaClass:currentClass],
+         NSStringFromRect(currentView.frame)
          ];
-        
+                
         for (NSView* subview in subViews) {
             [self traverseViewHierarchy:subview currentTreeHeight:(height+1)];
+            if ([subview isKindOfClass:[NSScrollView class]]) {
+                NSScrollView* scrollView = (NSScrollView*)subview;
+                [stdOut writeStringWithFormat:@"+"];
+                [self traverseViewHierarchy:[scrollView documentView] currentTreeHeight:height+1];
+            }
         }
     }
 }

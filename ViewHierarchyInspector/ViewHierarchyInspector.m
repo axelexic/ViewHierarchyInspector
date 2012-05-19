@@ -158,6 +158,12 @@ static ViewHierarchyInspector* gViewInspector = nil;
 -(void) adornWithFrames: (id) viewOrLayer{
     
     if ([viewOrLayer isKindOfClass:[CALayer class]]) {
+        CALayer* thisLayer = viewOrLayer;
+        if ([thisLayer superlayer] == NULL) {
+            thisLayer.borderColor = self.viewBorderColor;
+            thisLayer.borderWidth = 1.0f;
+            [thisLayer setNeedsDisplay];
+        }
         return;
     }
     
@@ -167,6 +173,8 @@ static ViewHierarchyInspector* gViewInspector = nil;
     if ([currentView layer] == NULL) {
         // This is not 100% right thing to do, but I don't
         // want to get rid of the content.
+        CALayer* newLayer = [CALayer layer];
+        [currentView setLayer:newLayer];
         currentView.wantsLayer = YES;
     }
     
@@ -217,11 +225,50 @@ static ViewHierarchyInspector* gViewInspector = nil;
         }
         
         
-        [stdOut writeStringWithFormat:@" %s <- %@ <%@>\n",
+        [stdOut writeStringWithFormat:@" %s <- %@ <%@>",
          object_getClassName(viewOrLayer),
          [self classHierarchyUptoCocoaClass:currentClass],
          NSStringFromRect([viewOrLayer frame])
          ];
+        
+        if ([viewOrLayer isKindOfClass:[NSControl class]]) {
+            if ([viewOrLayer respondsToSelector:@selector(cells)]) {
+                NSArray* cells = [viewOrLayer cells];
+                NSUInteger count = [cells count];
+                [stdOut writeStringWithFormat:@"(Cells: "];
+                do{
+                    count = count - 1;
+                    NSCell* cell = [cells objectAtIndex:count];
+                    Class targetClass = [cell target]?[[cell target] class]:[[(NSControl*)viewOrLayer target] class];
+                    SEL action = [cell action]?[cell action]:[(NSControl*)viewOrLayer action];
+                    
+                    if (count>=1){
+                        [stdOut writeStringWithFormat:@"%@ -> -[%s %@] | ",
+                         [cell title],
+                         object_getClassName(targetClass),
+                         NSStringFromSelector(action)];
+                    }else{
+                        [stdOut writeStringWithFormat:@"%@ -> -[%s %@]) ",
+                         [cell title],
+                         object_getClassName(targetClass),
+                         NSStringFromSelector(action)];
+                    }
+                }while (count > 0);
+            }else{
+                NSCell* controlCell = [viewOrLayer cell];
+                Class targetClass = [controlCell target]?[[controlCell target] class]:[[(NSControl*)viewOrLayer target] class];
+                SEL action = [controlCell action]?[controlCell action]:[(NSControl*)viewOrLayer action];
+                
+                if (controlCell) {
+                    [stdOut writeStringWithFormat:@" (Cell : %@ -> -[%s %@]) ",
+                     [controlCell title],
+                     object_getClassName(targetClass),
+                     NSStringFromSelector(action)];
+                }
+            }
+         }
+        
+        [stdOut writeStringWithFormat:@"\n"];
         
         if (self.likesFrames) {
             [self adornWithFrames:viewOrLayer];

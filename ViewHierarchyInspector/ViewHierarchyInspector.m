@@ -217,8 +217,9 @@ static ViewHierarchyInspector* gViewInspector = nil;
         }
         
         
-        [stdOut writeStringWithFormat:@" %s <- %@ <%@>\n",
+        [stdOut writeStringWithFormat:@" %s <%p> <- %@ <%@>\n",
          object_getClassName(viewOrLayer),
+         (void*)viewOrLayer,
          [self classHierarchyUptoCocoaClass:currentClass],
          NSStringFromRect([viewOrLayer frame])
          ];

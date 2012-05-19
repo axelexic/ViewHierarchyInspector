@@ -22,21 +22,26 @@
 
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 
 #define MAX_WINDOW_CACHE_SIZE   32
 
 @interface ViewHierarchyInspector : NSObject{
-    @private
+@private
     void* windowsTraversed[MAX_WINDOW_CACHE_SIZE];
     NSInteger maxIndex;
     BOOL        likesFrames;
+    CGColorRef _viewBorderColor;
+    CGColorRef _textColor;
 }
 
 +(id) sharedViewInspector;
 @property(assign, atomic) BOOL likesFrames;
+@property(assign, nonatomic) CGColorRef viewBorderColor;
+@property(assign, nonatomic) CGColorRef textColor;
 -(void) applicationWillFinishLaunching: (NSNotification*) aNotification;
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
--(void) traverseViewHierarchy: (NSView*) currentView currentTreeHeight: (NSUInteger) height;
+-(void) traverseViewHierarchy: (id) viewOrLayer currentTreeHeight: (NSUInteger) height;
 -(void) printVewHierarchyOfMainWindow: (NSNotification*) aNotification;
 
 @end

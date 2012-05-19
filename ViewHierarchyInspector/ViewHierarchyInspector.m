@@ -27,16 +27,21 @@
 #import <QuartzCore/QuartzCore.h>
 #define INDENT  4
 
+#if __has_feature(objc_arc)
+    #define BRIDGE __bridge
+#else
+    #define BRIDGE
+#endif
+
 // Let the magic being!!!
 static void initialize(void) __attribute__((constructor));
 static void initialize(void){
-
-    NSString* likesFrames = [[[NSProcessInfo processInfo] environment] objectForKey:@"SHOW_FRAMES"];
 
     // This is faily early on the the process intialization so
     // neither an autorelease pool is available, not
     // NSApp is available.
     @autoreleasepool {
+        NSString* likesFrames = [[[NSProcessInfo processInfo] environment] objectForKey:@"SHOW_FRAMES"];
         ViewHierarchyInspector* viewInsepector = [ViewHierarchyInspector sharedViewInspector];
         if (likesFrames) {
             viewInsepector.likesFrames = YES;
@@ -58,6 +63,22 @@ static void initialize(void){
 @implementation ViewHierarchyInspector
 static ViewHierarchyInspector* gViewInspector = nil;
 @synthesize likesFrames;
+@synthesize viewBorderColor = _viewBorderColor;
+@synthesize textColor = _textColor;
+
+-(CGColorRef) viewBorderColor{
+    if (_viewBorderColor == NULL) {
+        _viewBorderColor = CGColorCreateGenericRGB(1.0, 0, 0, 1.0);
+    }
+    return _viewBorderColor;
+}
+
+-(CGColorRef) textColor{
+    if (_textColor == NULL) {
+        _textColor = CGColorCreateGenericRGB(0.8, 0.8, 0.8, 1.0);
+    }
+    return _textColor;
+}
 
 +(id) sharedViewInspector{
     return (gViewInspector)?gViewInspector:[[self alloc] init];
@@ -105,7 +126,7 @@ static ViewHierarchyInspector* gViewInspector = nil;
     NSLog(@"Traversing window: %p <%@>", win, [win title]);
     
     for (int i = 0 ; i<MIN(gViewInspector->maxIndex, MAX_WINDOW_CACHE_SIZE); i++) {
-        if (gViewInspector->windowsTraversed[i] == (__bridge void*)win) {
+        if (gViewInspector->windowsTraversed[i] == (BRIDGE void*)win) {
             NSLog(@"Window %p became main window again!", win);
             return;
         }
@@ -120,13 +141,13 @@ static ViewHierarchyInspector* gViewInspector = nil;
     NSString* result = @"";
     NSString* topLevel = [NSString stringWithFormat:@"%s", class_getName(currentClass)];
     
-    if ([topLevel hasPrefix:@"NS"]) {
+    if ([topLevel hasPrefix:@"NS"] || [topLevel hasPrefix:@"CA"]) {
         return @"";
     }
     
     while ((currentClass  = class_getSuperclass(currentClass)) != [NSObject class]) {
         NSString* className = [NSString stringWithFormat:@"%s", class_getName(currentClass)];
-        if ([className hasPrefix:@"NS"]) {
+        if ([className hasPrefix:@"NS"] || [className hasPrefix:@"CA"]) {
             break;
         }
         result = [result stringByAppendingFormat:@"%@ <- ", className];
@@ -134,28 +155,47 @@ static ViewHierarchyInspector* gViewInspector = nil;
     return [result stringByAppendingFormat:@"%s", class_getName(currentClass)];
 }
 
--(void) adornWithFrames: (NSView*) currentView{
-    currentView.wantsLayer = YES;
-    if (currentView.frame.size.width > 200) {
-        currentView.layer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
-        currentView.layer.borderWidth = 2.0f;
-        currentView.layer.cornerRadius = 8.0f;
-    }else {
-        currentView.layer.borderColor = CGColorCreateGenericRGB(0.0, 0.0, 1.0, 1.0);
-        currentView.layer.borderWidth = 2.0f;
+-(void) adornWithFrames: (id) viewOrLayer{
+    
+    if ([viewOrLayer isKindOfClass:[CALayer class]]) {
+        return;
     }
+    
+    NSView* currentView = viewOrLayer;
+    /* this is a view now. */
+    
+    if ([currentView layer] == NULL) {
+        // This is not 100% right thing to do, but I don't
+        // want to get rid of the content.
+        currentView.wantsLayer = YES;
+    }
+    
+    if (currentView.frame.size.width > 200) {
+        currentView.layer.borderColor = self.viewBorderColor;
+        currentView.layer.borderWidth = 1.0f;
+        currentView.layer.cornerRadius = 6.0f;
+    }else {
+        currentView.layer.borderColor = self.viewBorderColor;
+        currentView.layer.borderWidth = 1.0f;
+    }
+    
     currentView.layer.layoutManager = [CAConstraintLayoutManager layoutManager];
 
     /* IF we are the top level vew, we print frame info. */
-    if (([[currentView subviews] count]==0)&&(currentView.frame.size.width > 40.0)) {
+    if (([[currentView subviews] count]==0)&&
+        (currentView.frame.size.width > 40.0) &&
+        (currentView.frame.size.height > 16.0)) {
         CATextLayer* textLayer = [CATextLayer layer];
-        textLayer.string = NSStringFromRect(currentView.frame);
-        textLayer.fontSize = 10.0;
-        textLayer.foregroundColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
-        //           textLayer.frame = CGRectMake(0, 0, 32, 32);
+        textLayer.string = [NSString stringWithFormat:@"%s", class_getName([currentView class])];
+        textLayer.fontSize = 14.0;
+        textLayer.foregroundColor = self.textColor;
         textLayer.constraints = [NSArray arrayWithObjects:
-                                 [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                 [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+                                 [CAConstraint constraintWithAttribute:kCAConstraintMidX
+                                                            relativeTo:@"superlayer"
+                                                             attribute:kCAConstraintMidX],
+                                 [CAConstraint constraintWithAttribute:kCAConstraintMidY
+                                                            relativeTo:@"superlayer"
+                                                             attribute:kCAConstraintMidY],
                                  nil];
         [currentView.layer addSublayer:textLayer];
     }
@@ -163,28 +203,41 @@ static ViewHierarchyInspector* gViewInspector = nil;
     [currentView.layer setNeedsDisplay];
 }
 
--(void) traverseViewHierarchy: (NSView*) currentView currentTreeHeight: (NSUInteger) height{
+-(void) traverseViewHierarchy: (id) viewOrLayer
+            currentTreeHeight: (NSUInteger) height{
     @autoreleasepool {
         NSFileHandle* stdOut = [NSFileHandle fileHandleWithStandardOutput];
         NSUInteger indentation = height*INDENT;
-        NSArray* subViews = [currentView subviews];
-        Class currentClass = [currentView class];
+        NSArray* subViews;
+        
+        Class currentClass = [viewOrLayer class];
         
         for (int i = 0; i<indentation; i++) {
             [stdOut writeStringWithFormat:@" "];
         }
         
+        
         [stdOut writeStringWithFormat:@" %s <- %@ <%@>\n",
-         object_getClassName(currentView),
+         object_getClassName(viewOrLayer),
          [self classHierarchyUptoCocoaClass:currentClass],
-         NSStringFromRect(currentView.frame)
+         NSStringFromRect([viewOrLayer frame])
          ];
-
+        
         if (self.likesFrames) {
-            [self adornWithFrames:currentView];
+            [self adornWithFrames:viewOrLayer];
         }
-
-        for (NSView* subview in subViews) {
+        
+        if ([viewOrLayer isKindOfClass:[NSView class]]) {
+            subViews = [viewOrLayer subviews];
+            if ([viewOrLayer wantsLayer] && [viewOrLayer layer]) {
+                [self traverseViewHierarchy:[viewOrLayer layer]
+                          currentTreeHeight:(height+2)];
+            }
+        }else if([viewOrLayer isKindOfClass:[CALayer class]]){
+            subViews = [viewOrLayer sublayers];
+        }
+        
+        for (id subview in subViews) {
             [self traverseViewHierarchy:subview currentTreeHeight:(height+1)];
         }
     }

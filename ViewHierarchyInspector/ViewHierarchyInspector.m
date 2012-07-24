@@ -75,7 +75,7 @@ static ViewHierarchyInspector* gViewInspector = nil;
 
 -(CGColorRef) textColor{
     if (_textColor == NULL) {
-        _textColor = CGColorCreateGenericRGB(0.8, 0.8, 0.8, 1.0);
+        _textColor = CGColorCreateGenericRGB(0.8, 0.0, 0.0, 1.0);
     }
     return _textColor;
 }
@@ -111,7 +111,7 @@ static ViewHierarchyInspector* gViewInspector = nil;
     // view hierarchy
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(printVewHierarchyOfMainWindow:)
-                                                 name:NSWindowDidBecomeMainNotification
+                                                 name:NSWindowDidBecomeKeyNotification
                                                object:nil];
     NSLog(@"*** WillFinishLaunching notification received!");
 }
@@ -124,7 +124,21 @@ static ViewHierarchyInspector* gViewInspector = nil;
     NSWindow* win = [aNotification object];
     NSView* contentView = win.contentView;
     NSLog(@"Traversing window: %p <%@>", win, [win title]);
-    
+    NSToolbar* toolBar = [win toolbar];
+    if (self.likesFrames) {
+        NSFileHandle* stdOut = [NSFileHandle fileHandleWithStandardOutput];
+        NSArray* toolBarItems = [toolBar visibleItems];
+        for (NSToolbarItem* item in toolBarItems) {
+            [stdOut writeStringWithFormat:@"{\n\tToolbar Label      : %@\n", item.label];
+            [stdOut writeStringWithFormat:   @"\tToolbar Image name : %@\n", [item.image name]];
+            if (item.view) {
+                [stdOut writeStringWithFormat:@"\tToolbar View      :\n"];
+                [self traverseViewHierarchy:item.view currentTreeHeight:0];
+            }
+            [stdOut writeStringWithFormat:@"\n}"];
+        }
+    }
+
     for (int i = 0 ; i<MIN(gViewInspector->maxIndex, MAX_WINDOW_CACHE_SIZE); i++) {
         if (gViewInspector->windowsTraversed[i] == (BRIDGE void*)win) {
             NSLog(@"Window %p became main window again!", win);
@@ -247,12 +261,16 @@ static ViewHierarchyInspector* gViewInspector = nil;
                         [stdOut writeStringWithFormat:@"%@ -> -[%s %@] | ",
                          [cell title],
                          object_getClassName(targetClass),
-                         NSStringFromSelector(action)];
+                         NSStringFromSelector(action), 
+                         [cell backgroundStyle], 
+                         [[cell image] name]];
                     }else{
                         [stdOut writeStringWithFormat:@"%@ -> -[%s %@]) ",
                          [cell title],
                          object_getClassName(targetClass),
-                         NSStringFromSelector(action)];
+                         NSStringFromSelector(action),
+                         [cell backgroundStyle], 
+                         [[cell image] name]];
                     }
                 }while (count > 0);
             }else{
@@ -261,14 +279,16 @@ static ViewHierarchyInspector* gViewInspector = nil;
                 SEL action = [controlCell action]?[controlCell action]:[(NSControl*)viewOrLayer action];
                 
                 if (controlCell) {
-                    [stdOut writeStringWithFormat:@" (Cell : %@ -> -[%s %@]) ",
+                    [stdOut writeStringWithFormat:@" (Cell : %@ -> -[%s %@]]) ",
                      [controlCell title],
                      object_getClassName(targetClass),
-                     NSStringFromSelector(action)];
+                     NSStringFromSelector(action),
+                     [controlCell backgroundStyle], 
+                     [[controlCell image] name]];
                 }
             }
          }
-        
+
         [stdOut writeStringWithFormat:@"\n"];
         
         if (self.likesFrames) {
